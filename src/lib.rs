@@ -13,6 +13,5 @@ pub fn solve(day: i32) {
 }
 
 fn read_input() -> String {
-    io::read_to_string(io::stdin())
-        .expect("Problem reading input")
+    io::read_to_string(io::stdin()).expect("Problem reading input")
 }

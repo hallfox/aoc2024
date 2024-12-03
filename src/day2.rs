@@ -52,7 +52,11 @@ fn star2(input: &str) {
 }
 
 fn is_safe(levels: Vec<&i32>) -> bool {
-    let diffs: Vec<_> = levels.iter().tuple_windows().map(|(x, y)| *x - *y).collect();
+    let diffs: Vec<_> = levels
+        .iter()
+        .tuple_windows()
+        .map(|(x, y)| *x - *y)
+        .collect();
     (diffs.iter().all(|x| *x < 0) || diffs.iter().all(|x| *x > 0))
         && diffs.iter().all(|x| x.abs() >= 1 && x.abs() <= 3)
 }
