@@ -1,4 +1,5 @@
 use regex::Regex;
+use crate::util::ForceI32;
 
 pub fn solve(input: &str) {
     star1(input);
@@ -37,12 +38,3 @@ fn star2(input: &str) {
     println!("{val}");
 }
 
-trait ForceI32 {
-    fn to_i32(&self) -> i32;
-}
-
-impl ForceI32 for &str {
-    fn to_i32(&self) -> i32 {
-        self.parse::<i32>().unwrap()
-    }
-}

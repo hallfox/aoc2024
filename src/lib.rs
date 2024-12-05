@@ -4,9 +4,11 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
+mod util;
 
 pub fn solve(day: i32) {
-    let days = [day1::solve, day2::solve, day3::solve, day4::solve];
+    let days = [day1::solve, day2::solve, day3::solve, day4::solve, day5::solve];
 
     let input = read_input();
     let i = (day - 1) as usize;
