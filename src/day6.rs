@@ -16,7 +16,6 @@ fn star1(input: &str) {
     path.sort();
     let spaces = path.iter().dedup().count();
 
-    // let spaces = grid.0.iter().flatten().filter(|&x| *x == 'X').count();
     println!("{spaces}");
 }
 

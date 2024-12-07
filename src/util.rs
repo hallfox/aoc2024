@@ -150,10 +150,15 @@ impl<'a, T> Iterator for DirPath<'a, T> {
 
 pub trait ForceI32 {
     fn to_i32(&self) -> i32;
+    fn to_i64(&self) -> i64;
 }
 
 impl ForceI32 for &str {
     fn to_i32(&self) -> i32 {
         self.parse::<i32>().unwrap()
+    }
+
+    fn to_i64(&self) -> i64 {
+        self.parse::<i64>().unwrap()
     }
 }
