@@ -10,7 +10,7 @@ impl<T> Grid2<T> {
 }
 
 // Grid utilities
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub enum Dir {
     N,
     NE,
@@ -20,6 +20,18 @@ pub enum Dir {
     SW,
     W,
     NW,
+}
+
+impl Dir {
+    pub fn rotate(&self, times: usize) -> Self {
+        use Dir::*;
+        const CARDINALS: [Dir; 8] = [
+            N, NE, E, SE, S, SW, W, NW
+        ];
+
+        let (i, _) = CARDINALS.iter().enumerate().find(|(_, d)| *d == self).unwrap();
+        CARDINALS[(i + times) % 8]
+    }
 }
 
 #[derive(Debug, Clone)]
