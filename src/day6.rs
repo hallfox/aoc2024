@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::util::{Dir, Grid, Loc};
 use std::collections::HashSet;
 
@@ -9,31 +11,12 @@ pub fn solve(input: &str) {
 /// If there is something directly in front of you, turn right 90 degrees.
 /// Otherwise, take a step forward.
 fn star1(input: &str) {
-    let mut grid: Grid<char> = Grid(input.lines().map(|l| l.chars().collect()).collect());
+    let grid: Grid<char> = Grid(input.lines().map(|l| l.chars().collect()).collect());
+    let mut path = get_guard_path(&grid);
+    path.sort();
+    let spaces = path.iter().dedup().count();
 
-    let start = find_start(&grid).unwrap();
-    let mut pos = start;
-    let mut dir = Dir::N;
-    loop {
-        let (r, c) = pos;
-        grid.0[r][c] = 'X';
-
-        let mut next = match grid.neighbor(dir, pos) {
-            Some(next) => next,
-            None => break,
-        };
-        while grid.at(next) == Some(&'#') {
-            dir = dir.rotate(2);
-            next = match grid.neighbor(dir, pos) {
-                Some(next) => next,
-                None => break,
-            };
-        }
-
-        pos = next;
-    }
-
-    let spaces = grid.0.iter().flatten().filter(|&x| *x == 'X').count();
+    // let spaces = grid.0.iter().flatten().filter(|&x| *x == 'X').count();
     println!("{spaces}");
 }
 
@@ -48,22 +31,50 @@ fn find_start(grid: &Grid<char>) -> Option<Loc> {
     None
 }
 
-// This one takes a few seconds, I wouldn't accept it under a time limit
-fn star2(input: &str) {
-    let mut grid: Grid<char> = Grid(input.lines().map(|l| l.chars().collect()).collect());
+fn get_guard_path(grid: &Grid<char>) -> Vec<Loc> {
+    let start = find_start(&grid).unwrap();
+    let mut pos = start;
+    let mut dir = Dir::N;
+    let mut path = Vec::new();
+    'stop: loop {
+        path.push(pos);
 
-    let mut spots = 0;
-    for r in 0..grid.rows() {
-        for c in 0..grid.cols() {
-            if grid.at((r, c)) == Some(&'.') {
-                grid.0[r][c] = '#';
-                if is_looping(&grid) {
-                    spots += 1;
-                }
-                grid.0[r][c] = '.';
+        loop {
+            let next = match grid.neighbor(dir, pos) {
+                Some(next) => next,
+                None => break 'stop,
+            };
+
+            if grid.at(next) == Some(&'#') {
+                dir = dir.rotate(2);
+            } else {
+                pos = next;
+                break;
             }
         }
     }
+    path
+}
+
+// This one takes a few seconds, I wouldn't accept it under a time limit
+fn star2(input: &str) {
+    let mut grid = Grid::from_str(input);
+    let mut path = get_guard_path(&grid);
+    path.sort();
+    let spots = path
+        .iter()
+        .dedup()
+        .filter(|(r, c)| {
+            if grid.at((*r, *c)) == Some(&'.') {
+                grid.0[*r][*c] = '#';
+                let loops = is_looping(&grid);
+                grid.0[*r][*c] = '.';
+                loops
+            } else {
+                false
+            }
+        })
+        .count();
 
     println!("{spots}");
 }

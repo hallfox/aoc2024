@@ -87,6 +87,29 @@ impl<T> Grid<T> {
             None
         }
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = &T> {
+        self.0.iter().flatten()
+    }
+
+    pub fn loc_iter(&self) -> impl Iterator<Item = Loc> {
+        let rows = self.rows();
+        let cols = self.cols();
+        (0..rows).into_iter().flat_map(move |r| (0..cols).into_iter().map(move |c| (r, c)))
+    }
+}
+
+impl Grid<char> {
+    /// Parses a string that looks like this:
+    ///
+    /// abcdefg
+    /// hijklmn
+    /// opqrstu
+    /// vwxyz?!
+    pub fn from_str(input: &str) -> Self {
+        let grid: Vec<Vec<_>> = input.lines().map(|l| l.chars().collect()).collect();
+        Self(grid)
+    }
 }
 
 fn checked_add(x: Loc, y: (isize, isize)) -> Option<Loc> {
