@@ -7,6 +7,8 @@ mod day4;
 mod day5;
 mod day6;
 mod day7;
+mod day8;
+mod day9;
 mod util;
 
 pub fn solve(day: i32) {
@@ -18,6 +20,8 @@ pub fn solve(day: i32) {
         day5::solve,
         day6::solve,
         day7::solve,
+        day8::solve,
+        day9::solve,
     ];
 
     let input = read_input();
